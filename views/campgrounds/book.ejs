@@ -1,0 +1,78 @@
+<% include ../partials/header%>
+<div class="container">
+    <div class="row">
+        <h1 style="text-align:center;">Book <%=campground[0].CAMPNAME%></h1>
+        <hr>
+          <div style="width: 75% ;margin:25px auto;">
+            <form action="/campgrounds/<%=campground[0].ID%>/book" method="POST">
+                <div class="form-group">
+                    <h3 style="text-align:center">About the camp</h3>
+                    <p style="text-align:center"><%=campground[0].DESCRIPTION%></p>
+                    <hr>
+                </div>
+                 <div class="form-group" style="text-align:center;"">
+                    <h3 style=" display: inline-block; margin-right: 10%">Price: <span style="color:brown">Rs<span id="price"><%=campground[0].PRICE%></span></span>/person/day</h3>
+                    <h3 style="display: inline-block;">Location: <span style="color:brown"><%=campground[0].LOCATION%></span></h3>
+                    <hr>
+                </div>
+                
+                <div class="form-group" style="text-align:center;">
+                    <h4 style="display:inline-block">From:</h4>
+                    <input class="form-control" type="date" id="from" name="from" value="2018-08-10" style="display:inline-block; width:40%; margin-right: 2%">
+                    <h4 style="display:inline-block">To:</h4>
+                    <input class="form-control" type="date" id="to" name="to" value="2018-08-10" style="display:inline-block; width:40%;">
+                    <hr>
+                </div>
+
+                <div class="form-group" style="text-align:center;">
+                    <h4 style="display:inline-block;">Number Of people</h4>
+                    <input type="number" id="num" min="1" max="10" class="form-control" name="number" style="display:inline-block; width:25%" value="1">
+                    <hr>
+                </div>
+
+                <div class="form-group" style="text-align:center;">
+                        <h3 id="bill"style="display:inline-block;"></h3>
+                        <input type="hidden" name="bill" id="bill1">
+                        
+                        <hr>
+                        <script>
+                            var rate=document.getElementById('price');
+                            var bill=document.getElementById('bill');
+                            var to =document.getElementById("to");
+                            var from =document.getElementById("from");
+                            var num=document.getElementById("num");
+                            var print=document.getElementById("bill1");
+                            // console.log(Number(rate.innerHTML));
+                            
+                            num.addEventListener("change",updateprice);
+                            to.addEventListener("change",updateprice);
+                            from.addEventListener("change",updateprice);
+                            function updateprice(){
+                                var date2 = new Date(to.value);
+                                var date1 = new Date(from.value);
+                                // console.log(date2);
+                                
+                                var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+                                var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                                // console.log(diffDays);
+                                var totalbill =  Number(rate.innerHTML) * diffDays * Number(num.value);
+                                bill.innerHTML="Total Bill: &#8377;"+ totalbill;
+                                print.value=totalbill;
+                            }
+
+                        </script>
+                </div>
+                
+                <div class="form-group">
+                    <input class="form-control" type="hidden" name="user_id" value="<%=user%>">
+                </div>
+                <div class="form-group">
+                     <button class="btn btn-lg btn-primary btn-block">Submit</button>
+                </div>
+            </form>
+           <a href="/campgrounds">Go back</a>
+          </div>
+       
+    </div>
+</div>
+<% include ../partials/footer%>
