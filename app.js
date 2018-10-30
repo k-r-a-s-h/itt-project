@@ -392,12 +392,14 @@ app.post("/campgrounds/:id/book",authenticationMiddleware(),function(req,res){
 app.get("/bookings",authenticationMiddleware(),function(req,res){
   var user1=req.user.user_id;
   handleDatabaseOperation(req, res, function(request, response, connection) {
-    var query="SELECT * FROM booking where user_id=:user1 ";
+    var query="SELECT * FROM booking,campgrounds where booking.user_id=:user1 and booking.camp_id=campgrounds.id";
     connection.execute(query, [user1], { outFormat: oracledb.OBJECT }, function(err, result) {
       if (err) {
         console.log(err);
       } else {
+
       console.log(result.rows);
+        //add front end here
       res.send(result.rows);
     }
     doRelease(connection);
