@@ -400,12 +400,27 @@ app.get("/bookings",authenticationMiddleware(),function(req,res){
 
       console.log(result.rows);
         //add front end here
-      res.send(result.rows);
+      res.render("bookings",{bookings:result.rows});
     }
     doRelease(connection);
     });
  });
 });
+app.get("/bookings/:booking_id",authenticationMiddleware(),function(req,res){
+   handleDatabaseOperation(req,res,function(request,response,connection){
+       var bookings=req.params.booking_id;
+       var query="SELECT * FROM BOOKING,CAMPGROUNDS WHERE BOOKING_ID=:bookings AND CAMP_ID=ID";
+       connection.execute(query,[bookings],{outFormat:oracledb.OBJECT},function (err,result) {
+           if(err){
+               console.log(err);
+           }
+           console.log((result.rows));
+           res.render("./campgrounds/display",{booked:result.rows});
+       });
+   })
+});
+//cancel book route
+
 //edit campground age route
 app.get("/campgrounds/:id/edit",authenticationMiddleware(),function(req,res){
   handleDatabaseOperation(req, res, function(request, response, connection) {

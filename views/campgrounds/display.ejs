@@ -1,0 +1,45 @@
+<% include ../partials/header%>
+<div class="container">
+    <div class="row">
+        <h1 style="text-align:center;">Booking Details</h1>
+        <hr>
+        <div style="width: 75% ;margin:25px auto;">
+            <div style= " text-align: center;">
+                <div class="panel-group">
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <h3>Booking ID:<span style="color:brown"><%=booked[0].BOOKING_ID%></span></h3>
+                            <hr>
+                            <h4 style="display:inline-block;width: 45%;">FROM:<span style="color: brown"><%=booked[0].START_F.getDay().toString()+" / "+(booked[0].START_F.getMonth()+1).toString()+" / "+(booked[0].START_F.getFullYear()) %></span></h4>
+                            <h4 style="display:inline-block;width: 45%;">TO:<span style="color: brown"><%=booked[0].END_T.getDay()+" / "+(booked[0].END_T.getMonth()+1).toString()+" / "+booked[0].END_T.getFullYear()%></span></h4>
+                            <!-- format the date -->
+                        </div>
+                    </div>
+
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <h4 style="display:inline-block;width: 45%;">Admits:<span style="color: brown"><%=booked[0].TOTAL_PEOPLE%></span></h4>
+                            <h4 style="display:inline-block;width: 45%;">Total Amount: Rs<span style="color: brown"><%=booked[0].AMOUNT%></span></h4>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4 style="display:inline-block;width: 45%;">Campname: <span style="color: brown"><%=booked[0].CAMPNAME%></span></h4>
+                                <h4 style="display:inline-block;width: 45%;">Location: <span style="color: brown"><%=booked[0].LOCATION%></span></h4>
+                                <br>
+                                <hr>
+                                <a href="#">
+                                    <button class="btn btn-danger">Cancel</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a href="/campgrounds">Go back</a>
+            </div>
+
+        </div>
+    </div>
+
+<% include ../partials/footer%>
