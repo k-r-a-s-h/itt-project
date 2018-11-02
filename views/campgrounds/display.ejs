@@ -27,9 +27,11 @@
                                 <h4 style="display:inline-block;width: 45%;">Location: <span style="color: brown"><%=booked[0].LOCATION%></span></h4>
                                 <br>
                                 <hr>
-                                <a href="#">
+                                <%if(!(booked[0].CANCELLED==1)){%>
+                                <a href="/bookings/<%=booked[0].BOOKING_ID%>/cancel">
                                     <button class="btn btn-danger">Cancel</button>
                                 </a>
+                                <%}%>
                             </div>
                         </div>
                     </div>

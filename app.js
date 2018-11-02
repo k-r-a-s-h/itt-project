@@ -414,13 +414,32 @@ app.get("/bookings/:booking_id",authenticationMiddleware(),function(req,res){
            if(err){
                console.log(err);
            }
-           console.log((result.rows));
-           res.render("./campgrounds/display",{booked:result.rows});
+           else{
+               console.log((result.rows));
+               res.render("./campgrounds/display",{booked:result.rows});
+           }
+           doRelease(connection);
+
        });
    })
 });
 //cancel book route
-
+app.get("/bookings/:id/cancel",authenticationMiddleware(),function (req,res) {
+    handleDatabaseOperation(req,res,function (request,response,connection) {
+        var booking_id=req.params.id.toString();
+        var user_id=Number(req.user.user_id);
+        var query="UPDATE booking set cancelled=1 where booking_id=:user_id and user_id=:user_id";
+        connection.execute(query,[booking_id,user_id],{autoCommit:true,outFormat:oracledb.OBJECT},function (err,result) {
+            if(err){
+                console.log(err);
+                res.send("some error occured");
+            }
+            else{
+                res.redirect("/bookings/"+booking_id);
+            }
+        })
+    })
+});
 //edit campground age route
 app.get("/campgrounds/:id/edit",authenticationMiddleware(),function(req,res){
   handleDatabaseOperation(req, res, function(request, response, connection) {
