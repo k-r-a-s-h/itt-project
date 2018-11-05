@@ -355,7 +355,7 @@ app.post("/admin/login",function(req,res){
     var d_mail=req.body.username;
     var d_password=req.body.password;
     if(req.body.username==email && req.body.password==password){
-        code=getRndInteger(100000,99999);
+        code=getRndInteger(100000,999999);
         var mailOptions = {
             from: 'smoked.turing@gmail.com',
             to: email,
@@ -378,7 +378,23 @@ app.post("/admin/login",function(req,res){
     }
 });
 //verify code
-// app.post("/admin/login/code",)
+function alreadyAuthenticatedMiddleware() {
+    return function(req, res, next) {
+        if (req.body.code==code) {
+            console.log("\nin\n"+req.body.code+req.body.username);
+            return next();
+        }
+        res.redirect('/admin');
+    }
+}
+ app.post("/admin/login/code",alreadyAuthenticatedMiddleware(),
+     passport.authenticate('local',
+     {
+         successRedirect:'/campgrounds',
+         failureRedirect:'/admin'
+
+     })
+ );
 // booking page route
 app.get("/campgrounds/:id/book",authenticationMiddleware(),function(req,res){
   var user1=req.user.user_id;
