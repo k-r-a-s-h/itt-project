@@ -8,10 +8,19 @@ var cookieParser         =require('cookie-parser');
 var session              =require('express-session');
 var passport             =require('passport');
 var flash                =require('connect-flash');
+
 var bcrypt               =require('bcrypt');
+var nodemailer           =require('nodemailer');
 //var Campground           =require("./models/campground.js");
 //var Comment              =require("./models/comment.js");
 //var User                 =require("./models/user");
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'smoked.turing@gmail.com',
+        pass: 'Turing@2018'
+    }
+});
 var path = require('path');
 
 app.set('view engine', 'ejs'); 
@@ -328,6 +337,48 @@ app.get("/campgrounds/:id", function(req, res) {
       
   });
 });
+
+//admin login scene
+app.get("/admin",function(req,res){
+
+        res.render("admin/login");
+});
+//admin login post route
+var code;
+function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+app.post("/admin/login",function(req,res){
+    var email="krishna05564@gmail.com";
+    var password="password";
+    var data={email:email,password:password};
+    var d_mail=req.body.username;
+    var d_password=req.body.password;
+    if(req.body.username==email && req.body.password==password){
+        code=getRndInteger(100000,99999);
+        var mailOptions = {
+            from: 'smoked.turing@gmail.com',
+            to: email,
+            subject: 'Code for mahecamp admin login',
+            text: 'Your login code is'+code
+        };
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+                console.log(data);
+                res.render("admin/code",{data:data});
+            }
+        });
+    }
+    else{
+        console.log(d_mail +" "+d_password);
+        res.send("Wrong credentials");
+    }
+});
+//verify code
+// app.post("/admin/login/code",)
 // booking page route
 app.get("/campgrounds/:id/book",authenticationMiddleware(),function(req,res){
   var user1=req.user.user_id;
