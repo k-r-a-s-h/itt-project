@@ -116,6 +116,100 @@ app.get("/",function(req,res){
     res.render("landing");
     //res.send("bhak");
 });
+//admin access begin
+app.get("/admin/campgrounds",authenticationMiddleware(),function(req,res){
+    // if(req.user){
+    //   console.log(req.user.user_id);
+    // console.log(req.isAuthenticated());
+    // }
+
+    handleDatabaseOperation(req, res, function(request, response, connection) {
+        var query="SELECT * FROM campgrounds where id> :id ";
+        connection.execute(query, [0], { outFormat: oracledb.OBJECT }, function(err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                //console.log(result.rows);
+                res.render("admin/index",{campgrounds: result.rows});
+            }
+            doRelease(connection);
+        });
+    });
+});
+
+app.get("/admin/campgrounds/:id",authenticationMiddleware(),function(req, res) {
+    // Find camground with ID
+    var camp;
+    handleDatabaseOperation(req, res, function(request, response, connection) {
+        var query="SELECT id,campname,price,name,imgurl,user_id,description FROM campgrounds natural join users where id=:id";
+        connection.execute(query, [req.params.id], {outFormat: oracledb.OBJECT}, function(err, result) {
+            if (err) {
+                console.log(err);
+                throw err;
+            } else {
+                camp = result.rows;
+                //console.log(result.rows);
+            }
+            query="SELECT content, name ,user_id,comment_id FROM comments natural join users where camp_id=:id";
+            connection.execute(query, [req.params.id], {outFormat: oracledb.OBJECT}, function(err, result) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                } else {
+                    //console.log(result.rows);
+                }
+                if(req.isAuthenticated()){
+                    console.log(req.user.user_id);
+                }
+                //console.log({campground: camp, comments: result.rows});
+                res.render("admin/show", {campground: camp, comments: result.rows, auth_id:(req.user ? req.user.user_id : 0 )});
+            });
+        });
+
+
+    });
+});
+
+app.post("/admin/campgrounds/:id/delete",authenticationMiddleware(),function(req,res){
+    handleDatabaseOperation(req,res,function(request,response,connection){
+        const id=req.params.id;
+        const query="delete from campgrounds where id=:id";
+        connection.execute(query,[id],{autoCommit:true,outFormat:oracledb.OBJECT},function(err,result){
+            if(err){
+                //throw err;
+
+                res.redirect("/admin/campgrounds/"+id);
+            }
+            else{
+                res.redirect("/admin/campgrounds");
+            }
+        })
+    })
+});
+
+app.post("/admin/campgrounds/:id/comments/:comment_id/delete",authenticationMiddleware(),function(req,res){
+    const user_id=req.body.userid;
+    // console.log(user_id);
+    const camp_id=req.params.id;
+    const comment_id=req.params.comment_id;
+    handleDatabaseOperation(req, res, function(request, response, connection) {
+        var query="delete from comments where user_id=:user_id and camp_id=:camp_id and comment_id=:comment_id";
+        connection.execute(query, [user_id,camp_id,comment_id], {autoCommit:true, outFormat: oracledb.OBJECT }, function(err, result){
+            if (err) {
+                console.log(err);
+                throw err;
+            } else {
+                console.log("done");
+                res.redirect("/admin/campgrounds/"+camp_id);
+            }
+            doRelease(connection);
+        });
+
+    });
+});
+
+//admin access closes here
+
 //about page
 app.get("/about",function(req,res){
   handleDatabaseOperation(req, res, function(request, response, connection) {
@@ -390,7 +484,7 @@ function alreadyAuthenticatedMiddleware() {
  app.post("/admin/login/code",alreadyAuthenticatedMiddleware(),
      passport.authenticate('local',
      {
-         successRedirect:'/campgrounds',
+         successRedirect:'/admin/campgrounds',
          failureRedirect:'/admin'
 
      })

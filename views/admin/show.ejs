@@ -1,0 +1,69 @@
+<% include ../partials/header%>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <p class="lead">YelpCamp</p>
+            <div class="list-group">
+                <li class="list-group-item active">Info-1</li>
+                <a href="/campgrounds/<%=campground[0].ID%>/book"><li class="list-group-item">Book Camp</li></a>
+                <li class="list-group-item">Info-3</li>
+            </div>
+            <!--MAP-->
+        </div>
+        <div class="col-md-9">
+            <div class="thumbnail">
+                <img class="img-responsive" src="<%=campground[0].IMGURL%>">
+                <div class="caption-full">
+
+                    <h4 class="pull-right">Rs:<%=campground[0].PRICE%></h4>
+                    <h4><a><%=campground[0].CAMPNAME%></a></h4>
+                    <p><%=campground[0].DESCRIPTION%></p>
+                    <p>
+                        <em>Submitted by: <%=campground[0].NAME%> </em>
+                    </p>
+
+
+                    <form id="delete-form" action="/admin/campgrounds/<%=campground[0].ID%>/delete" method="POST">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+
+
+                </div>
+            </div>
+
+            <div class="well">
+                <div class="text-right">
+
+                    <%var link='/campgrounds/'+campground[0].ID+'/comments/new';%>
+                    <%console.log(link);%>
+
+                    <a class="btn btn-success" href="<%=link%>">Add New Comment</a>
+                </div>
+
+
+
+
+
+                <%comments.forEach(function(comment){%>
+
+                <strong><%=comment.NAME%></strong>
+                <p><%=comment.CONTENT%></p>
+
+
+                    <form id="delete-form" action="/admin/campgrounds/<%= campground[0].ID %>/comments/<%= comment.COMMENT_ID %>/delete" method="POST">
+                        <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                        <input type="hidden" value="<%=comment.USER_ID%>" name="userid">
+                    </form><br>
+
+                <%});%>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<% include ../partials/footer%>
