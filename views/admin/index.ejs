@@ -1,9 +1,36 @@
-<% include ../partials/header%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YelpCamp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+</head>
+<body >
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">YelpCamp</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right ">
+                <%if(!isAuthenticated){%>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Sign Up</a></li>
+                <%} else {%>
+                    <li><a href="/admin/bookings">View All Bookings</a></li>
+                    <li><a href="/admin/users">View All Users</a></li>
+                    <li><a href="/logout">Logout</a></li>
+
+                <%}%>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <div class="container">
-    <header class="jumbotron" style="background-color: darkgrey;text-align: center;">
+    <header class="jumbotron" style="text-align: center;">
         <div class ="container">
-            <h1 style="color: white;text-shadow: 2px 2px 4px #000;">Welcome To YelpCamp!</h1>
+            <h1 style="text-shadow: 2px 2px 4px #333;">Welcome To MAHECamp!</h1>
             <p style="color: white;text-shadow: 2px 2px 4px #000;">View our hand-picked campgrounds from all over the world</p>
             <p>
                 <a class="btn btn-primary btn-lg" href="/campgrounds/new">Add New Campgrounds</a>

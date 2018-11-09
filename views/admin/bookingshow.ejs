@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YelpCamp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+</head>
+<body >
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">YelpCamp</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right ">
+                <%if(!isAuthenticated){%>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Sign Up</a></li>
+                <%} else {%>
+                    <li><a href="/admin/bookings">View All Bookings</a></li>
+                    <li><a href="/admin/users">View All Users</a></li>
+                    <li><a href="/logout">Logout</a></li>
+
+                <%}%>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Name</th>
+            <th>Campname</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Email</th>
+            <th>Cancellation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%for(var i=0;i<results.length;i++){%>
+        <tr>
+            <td><a href="/admin/bookings/<%=results[i].BOOKING_ID%>"><%=results[i].BOOKING_ID%></a></td>
+            <td><%=results[i].NAME%></td>
+            <td><%=results[i].CAMPNAME%></td>
+            <td><%=results[i].START_F.getDay()+"/"+(results[i].START_F.getMonth()+1)+"/"+results[i].START_F.getFullYear()%></td>
+            <td><%=results[i].END_T.getDay()+"/"+(results[i].END_T.getMonth()+1)+"/"+results[i].END_T.getFullYear()%></td>
+            <td><%=results[i].EMAIL%></td>
+            <%if(results[i].CANCELLED){%>
+                <td>Yes</td>
+            <%}else{%>
+                <td>No</td>
+            <%}%>
+        </tr>
+        <%}%>
+
+        </tbody>
+    </table>
+</div>
+
+<% include ../partials/footer%>

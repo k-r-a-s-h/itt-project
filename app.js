@@ -49,6 +49,7 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash());
 
+
 passport.serializeUser(function(user_id, done) {
      done(null, user_id);
  });
@@ -162,7 +163,7 @@ app.get("/admin/campgrounds/:id",authenticationMiddleware(),function(req, res) {
                     console.log(req.user.user_id);
                 }
                 //console.log({campground: camp, comments: result.rows});
-                res.render("admin/show", {campground: camp, comments: result.rows, auth_id:(req.user ? req.user.user_id : 0 )});
+                res.render("admin/show", {message: req.flash('error'),campground: camp, comments: result.rows, auth_id:(req.user ? req.user.user_id : 0 )});
             });
         });
 
@@ -177,7 +178,7 @@ app.post("/admin/campgrounds/:id/delete",authenticationMiddleware(),function(req
         connection.execute(query,[id],{autoCommit:true,outFormat:oracledb.OBJECT},function(err,result){
             if(err){
                 //throw err;
-
+                req.flash('error', 'Bookings found to this campgrounds');
                 res.redirect("/admin/campgrounds/"+id);
             }
             else{
@@ -207,6 +208,45 @@ app.post("/admin/campgrounds/:id/comments/:comment_id/delete",authenticationMidd
 
     });
 });
+app.get("/admin/bookings",authenticationMiddleware(),function(req,res) {
+
+    handleDatabaseOperation(req, res, function (request, response, connection) {
+        var query = "select * from booking,campgrounds,users where camp_id=id and booking.user_id=users.user_id";
+        connection.execute(query, [], {autoCommit: true, outFormat: oracledb.OBJECT}, function (err, result) {
+            if (err) {
+                console.log(err);
+                throw err;
+            } else {
+                // console.log("done");
+                res.render("admin/bookingshow",{results:result.rows});
+                // res.send(result.rows);
+            }
+
+            doRelease(connection);
+        });
+
+    });
+});
+
+app.get("/admin/bookings/:booking_id",authenticationMiddleware(),function(req,res){
+    handleDatabaseOperation(req,res,function(request,response,connection){
+        var bookings=req.params.booking_id;
+        var query="SELECT * FROM BOOKING,CAMPGROUNDS WHERE BOOKING_ID=:bookings AND CAMP_ID=ID";
+        connection.execute(query,[bookings],{outFormat:oracledb.OBJECT},function (err,result) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log((result.rows));
+                res.render("./admin/adminviewbooking",{booked:result.rows});
+                // res.send(result.rows);
+            }
+            doRelease(connection);
+
+        });
+    })
+});
+
 
 //admin access closes here
 
