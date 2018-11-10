@@ -117,7 +117,7 @@ app.get("/",function(req,res){
     res.render("landing");
     //res.send("bhak");
 });
-//admin access begin
+//admin access begin================================================================================================================================
 app.get("/admin/campgrounds",authenticationMiddleware(),function(req,res){
     // if(req.user){
     //   console.log(req.user.user_id);
@@ -247,7 +247,52 @@ app.get("/admin/bookings/:booking_id",authenticationMiddleware(),function(req,re
     })
 });
 
+app.get("/admin/users",authenticationMiddleware(),function (req,res) {
+   handleDatabaseOperation(req,res,function(request,response,connection){
+       var query="SELECT * FROM USERS WHERE USER_ID != 121";
+       connection.execute(query,[],{autoCommit: true,outFormat:oracledb.OBJECT},function (err,result) {
+          if(err){
+              console.log(err);
+          }
+          else{
+              console.log(result.rows);
+              res.render("./admin/adminviewuser",{user:result.rows});
 
+          }
+       });
+   }) ;
+});
+
+app.post("/admin/users/ban/:id",authenticationMiddleware(),function(req,res){
+   handleDatabaseOperation(req,res,function (request,response,connection) {
+       var id=req.params.id;
+       var query="UPDATE USERS SET BANNED=1 WHERE USER_ID=:id";
+       connection.execute(query,[id],{autoCommit: true,outFormat:oracledb.OBJECT},function(err,result){
+          if(err){
+              console.log(err);
+              res.send("error occured");
+          }
+          else{
+              res.redirect("/admin/users");
+          }
+       });
+   }) ;
+});
+app.post("/admin/users/unban/:id",authenticationMiddleware(),function(req,res){
+    handleDatabaseOperation(req,res,function (request,response,connection) {
+        var id=req.params.id;
+        var query="UPDATE USERS SET BANNED=0 WHERE USER_ID=:id";
+        connection.execute(query,[id],{autoCommit: true,outFormat:oracledb.OBJECT},function(err,result){
+            if(err){
+                console.log(err);
+                res.send("error occured");
+            }
+            else{
+                res.redirect("/admin/users");
+            }
+        });
+    }) ;
+});
 //admin access closes here
 
 //about page

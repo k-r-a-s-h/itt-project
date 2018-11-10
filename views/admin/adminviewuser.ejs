@@ -1,3 +1,56 @@
 <% include ../partials/header1%>
 
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+
+            <th>Name</th>
+            <th>City</th>
+            <th>District</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Banned</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%for(var i=0;i<user.length;i++){%>
+        <tr>
+            <td><%=user[i].NAME%></td>
+            <td><%=user[i].CITY%></td>
+            <td><%=user[i].DISTRICT%></td>
+            <td><%=user[i].EMAIL%></td>
+            <td><%=user[i].PHONE_NO%></td>
+            <%if(user[i].BANNED){%>
+                <td>
+                <form action="/admin/users/unban/<%=user[i].USER_ID%>" method="post">
+                    <input type="submit" value="Unban">
+                </form>
+                </td>
+            <%}else{%>
+                <td>
+                <form action="/admin/users/ban/<%=user[i].USER_ID%>" method="post">
+                    <input type="submit" value="Ban">
+                </form>
+                </td>
+            <%}%>
+        </tr>
+        <%}%>
+
+        </tbody>
+    </table>
+
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 <% include ../partials/footer%>
