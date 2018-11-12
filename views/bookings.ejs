@@ -3,6 +3,9 @@
     <div class="row">
         <h1 style="text-align:center;">Your Bookings</h1>
         <hr>
+        <%if(bookings.length==0){%>
+            <h3 style="color: #888888; text-align: center;">You have no bookings!!</h3>
+        <%}%>
         <%for(var i=0;i<bookings.length;i++){%>
         <a href="/<%="bookings/"+bookings[i].BOOKING_ID%>" style="text-decoration: none">
         <div style="width: 75% ;margin:25px auto;">
@@ -27,14 +30,28 @@
                             <h4 style="color: red;" >Cancelled</h4>
                             <%}%>
                             <!-- format the date -->
+
                         </div>
                     </div>
                 </div>
             </div>
             </div>
         </a>
+
         <%}%>
-        <a href="/campgrounds">Go back</a>
+
         </div>
+    <a href="/campgrounds" style="text-align: center;">Go back</a>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
 </div>
 <% include partials/footer%>

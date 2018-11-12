@@ -163,7 +163,7 @@ app.get("/admin/campgrounds/:id",authenticationMiddleware(),function(req, res) {
                     console.log(req.user.user_id);
                 }
                 //console.log({campground: camp, comments: result.rows});
-                res.render("admin/show", {message: req.flash('error'),campground: camp, comments: result.rows, auth_id:(req.user ? req.user.user_id : 0 )});
+                res.render("admin/show", {message: req.flash('error'),message1:req.flash('done'),campground: camp, comments: result.rows, auth_id:(req.user ? req.user.user_id : 0 )});
             });
         });
 
@@ -182,6 +182,7 @@ app.post("/admin/campgrounds/:id/delete",authenticationMiddleware(),function(req
                 res.redirect("/admin/campgrounds/"+id);
             }
             else{
+
                 res.redirect("/admin/campgrounds");
             }
         })
@@ -201,6 +202,7 @@ app.post("/admin/campgrounds/:id/comments/:comment_id/delete",authenticationMidd
                 throw err;
             } else {
                 console.log("done");
+                req.flash('done', 'Comment Deleted');
                 res.redirect("/admin/campgrounds/"+camp_id);
             }
             doRelease(connection);
@@ -256,7 +258,7 @@ app.get("/admin/users",authenticationMiddleware(),function (req,res) {
           }
           else{
               console.log(result.rows);
-              res.render("./admin/adminviewuser",{user:result.rows});
+              res.render("./admin/adminviewuser",{user:result.rows, message:req.flash('done')});
 
           }
        });
@@ -273,6 +275,7 @@ app.post("/admin/users/ban/:id",authenticationMiddleware(),function(req,res){
               res.send("error occured");
           }
           else{
+              req.flash('done',"User banned!!");
               res.redirect("/admin/users");
           }
        });
@@ -288,6 +291,7 @@ app.post("/admin/users/unban/:id",authenticationMiddleware(),function(req,res){
                 res.send("error occured");
             }
             else{
+                req.flash('done',"User unbanned!!");
                 res.redirect("/admin/users");
             }
         });
@@ -345,8 +349,9 @@ app.get("/campgrounds/:id/comments/:comment_id/edit",authenticationMiddleware(),
           throw err;
         } else {
           console.log(result.rows);
+            req.flash('done',"Comment edited!!");
 
-          res.render("comments/edit",{camp:result.rows});
+            res.render("comments/edit",{camp:result.rows});
       }
       doRelease(connection);
       });
@@ -388,7 +393,9 @@ app.post("/campgrounds/:id/comments/:comment_id/delete",authenticationMiddleware
           throw err;
         } else {
           console.log(result.rows);
-          res.redirect("/campgrounds/"+camp_id);
+            req.flash('done',"Comment deleted!!");
+
+            res.redirect("/campgrounds/"+camp_id);
       }
       doRelease(connection);
       });
@@ -428,6 +435,7 @@ app.post("/campgrounds/:id/comments",authenticationMiddleware(),function(req,res
           throw err;
         } else {
         //console.log(result.rows);
+            req.flash('done',"New comment added!!");
         res.redirect("/campgrounds/"+camp_id);
       }
       doRelease(connection);
@@ -456,6 +464,7 @@ app.post("/campgrounds/new",authenticationMiddleware(),function(req,res){
           console.log(err);
         } else {
         console.log(result.rows);
+        req.flash('done',"New Campground Added!");
         res.redirect("/campgrounds");
       }
       doRelease(connection);
@@ -477,7 +486,7 @@ app.get("/campgrounds",function(req,res){
           console.log(err);
         } else {
         //console.log(result.rows);
-        res.render("campgrounds/index",{campgrounds: result.rows});
+        res.render("campgrounds/index",{campgrounds: result.rows,message:req.flash('done')});
       }
       doRelease(connection);
       });
@@ -509,7 +518,7 @@ app.get("/campgrounds/:id", function(req, res) {
         console.log(req.user.user_id);
       }
       console.log({campground: camp, comments: result.rows});
-        res.render("campgrounds/show", {campground: camp, comments: result.rows, auth_id:(req.user ? req.user.user_id : 0 )});
+        res.render("campgrounds/show", {message:req.flash('done'),message1:req.flash('error'), campground: camp, comments: result.rows, auth_id:(req.user ? req.user.user_id : 0 )});
       });
       });
 
@@ -539,7 +548,7 @@ app.post("/admin/login",function(req,res){
             from: 'smoked.turing@gmail.com',
             to: email,
             subject: 'Code for mahecamp admin login',
-            text: 'Your login code is'+code
+            text: 'Your login code is '+code
         };
         transporter.sendMail(mailOptions, function(error, info){
             if (error) {
@@ -678,7 +687,7 @@ app.get("/bookings/:id/cancel",authenticationMiddleware(),function (req,res) {
         connection.execute(query,[booking_id,user_id],{autoCommit:true,outFormat:oracledb.OBJECT},function (err,result) {
             if(err){
                 console.log(err);
-                res.send("some error occured");
+                res.send("some error occurred");
             }
             else{
                 res.redirect("/bookings/"+booking_id);
@@ -717,6 +726,7 @@ app.post("/campgrounds/:id/edit",authenticationMiddleware(),function(req,res){
           console.log(err);
         } else {
         //console.log(result.rows);
+            req.flash('done',"Campground Edited Successfully");
         res.redirect("/campgrounds/"+id);
       }
       doRelease(connection);
@@ -730,14 +740,17 @@ app.post("/campgrounds/:id/delete",authenticationMiddleware(),function(req,res){
     const query="delete from campgrounds where id=:id";
     connection.execute(query,[id],{autoCommit:true,outFormat:oracledb.OBJECT},function(err,result){
       if(err){
-        throw err;
+        // throw err;
+          req.flash('error',"Booking found for this campgrounds");
+          res.redirect("/campgrounds/"+id);
       }
       else{
-        res.redirect("/campgrounds");
+            req.flash('done',"Campground deleted!!");
+          res.redirect("/campgrounds");
       }
     })
   })
-})
+});
 //get register page
 app.get("/register",function(req, res) {
    res.render("register"); 
@@ -747,7 +760,7 @@ app.post("/register",function(req,res){
   const email=req.body.email;
   const password=req.body.password;
   const name =req.body.name;
-  const city =req.body.city
+  const city =req.body.city;
   const district=req.body.district;
   const mobile_number=req.body.mobile_number;
    id=99999;
@@ -787,7 +800,8 @@ app.post("/register",function(req,res){
 });
 //get login page
 app.get("/login", function(req, res) {
-   res.render("login"); 
+    console.log(req.flash('error'));
+   res.render("login",{message: req.flash('error')});
 });
 //handle post login route here
 app.post("/login", 
@@ -811,13 +825,13 @@ passport.use(new LocalStrategy(
     // console.log(username);
     // console.log(password);
     handleDatabaseOperation("", "", function(request, response, connection) {
-      var query="SELECT user_id,password FROM users where email=:username";
+      var query="SELECT user_id,password FROM users where email=:username and banned=0";
       connection.execute(query, [username], { outFormat: oracledb.OBJECT }, function(err, result) {
         if (err) {
           done(err);
         }
         if(!result.rows[0]) {
-        done(null,false);  
+            done(null,false);
       }
       else {
        const hash = result.rows[0].PASSWORD;

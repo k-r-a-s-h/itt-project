@@ -2,6 +2,11 @@
 
 
 <div class="container">
+    <% if (message.length>0) { %>
+    <div class="alert alert-success" role="alert">
+        <%=message%>
+    </div>
+    <%}%>
     <table class="table table-hover">
         <thead>
         <tr>

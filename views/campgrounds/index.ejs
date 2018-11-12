@@ -1,6 +1,11 @@
 <% include ../partials/header%>
 
 <div class="container">
+    <% if (message.length>0) { %>
+    <div class="alert alert-success" role="alert">
+        <%=message%>
+    </div>
+    <%}%>
 <header class="jumbotron" style="background-color: darkgrey;text-align: center;">
       <div class ="container">
       <h1 style="color: white;text-shadow: 2px 2px 4px #000;">Welcome To YelpCamp!</h1>

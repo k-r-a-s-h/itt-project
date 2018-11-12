@@ -1,13 +1,23 @@
 <% include ../partials/header%>
 
 <div class="container">
+    <% if (message.length>0) { %>
+    <div class="alert alert-success" role="alert">
+        <%=message%>
+    </div>
+    <%}%>
+    <% if (message1.length>0) { %>
+    <div class="alert alert-danger" role="alert">
+        <%=message1%>
+    </div>
+    <%}%>
     <div class="row">
         <div class="col-md-3">
             <p class="lead">YelpCamp</p>
             <div class="list-group">
-                <li class="list-group-item active">Info-1</li>
+                <li class="list-group-item active">About!</li>
                 <a href="/campgrounds/<%=campground[0].ID%>/book"><li class="list-group-item">Book Camp</li></a>
-                <li class="list-group-item">Info-3</li>
+
             </div>
             <!--MAP-->
         </div>
