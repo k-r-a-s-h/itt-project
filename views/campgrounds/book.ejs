@@ -4,13 +4,13 @@
         <h1 style="text-align:center;">Book <%=campground[0].CAMPNAME%></h1>
         <hr>
           <div style="width: 75% ;margin:25px auto;">
-            <form action="/campgrounds/<%=campground[0].ID%>/book" method="POST">
+            <form action="/campgrounds/<%=campground[0].ID%>/book" id="fr" method="POST">
                 <div class="form-group">
                     <h3 style="text-align:center">About the camp</h3>
                     <p style="text-align:center"><%=campground[0].DESCRIPTION%></p>
                     <hr>
                 </div>
-                 <div class="form-group" style="text-align:center;"">
+                 <div class="form-group" style="text-align:center;">
                     <h3 style=" display: inline-block; margin-right: 10%">Price: <span style="color:brown">Rs<span id="price"><%=campground[0].PRICE%></span></span>/person/day</h3>
                     <h3 style="display: inline-block;">Location: <span style="color:brown"><%=campground[0].LOCATION%></span></h3>
                     <hr>
@@ -18,9 +18,22 @@
                 
                 <div class="form-group" style="text-align:center;">
                     <h4 style="display:inline-block">From:</h4>
-                    <input class="form-control" type="date" id="from" name="from" value="2018-08-10" style="display:inline-block; width:40%; margin-right: 2%">
+
+                    <%var today =new Date();%>
+                    <%var dd =today.getDate();%>
+                    <%var mm=today.getMonth()+1;%>
+                    <%var yyyy=today.getFullYear();%>
+                    <%if(dd<10){%>
+                    <%dd='0'+dd;%>
+                    <%}%>
+                    <%if(mm<10){%>
+                    <%mm='0'+mm;%>
+                    <%}%>
+                    <%today=yyyy+'-'+mm+'-'+dd;%>
+
+                    <input class="form-control" type="date" id="from" name="from" value="<%=today %>" min="<%=today%>" style="display:inline-block; width:40%; margin-right: 2%">
                     <h4 style="display:inline-block">To:</h4>
-                    <input class="form-control" type="date" id="to" name="to" value="2018-08-10" style="display:inline-block; width:40%;">
+                    <input class="form-control" type="date" id="to" name="to" value="<%=today%>"  style="display:inline-block; width:40%;">
                     <hr>
                 </div>
 
@@ -35,44 +48,79 @@
                         <input type="hidden" name="bill" id="bill1">
                         
                         <hr>
-                        <script>
-                            var rate=document.getElementById('price');
-                            var bill=document.getElementById('bill');
-                            var to =document.getElementById("to");
-                            var from =document.getElementById("from");
-                            var num=document.getElementById("num");
-                            var print=document.getElementById("bill1");
-                            // console.log(Number(rate.innerHTML));
-                            
-                            num.addEventListener("change",updateprice);
-                            to.addEventListener("change",updateprice);
-                            from.addEventListener("change",updateprice);
-                            function updateprice(){
-                                var date2 = new Date(to.value);
-                                var date1 = new Date(from.value);
-                                // console.log(date2);
-                                
-                                var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-                                var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                                // console.log(diffDays);
-                                var totalbill =  Number(rate.innerHTML) * diffDays * Number(num.value);
-                                bill.innerHTML="Total Bill: &#8377;"+ totalbill;
-                                print.value=totalbill;
-                            }
 
-                        </script>
                 </div>
                 
                 <div class="form-group">
                     <input class="form-control" type="hidden" name="user_id" value="<%=user%>">
                 </div>
                 <div class="form-group">
-                     <button class="btn btn-lg btn-primary btn-block">Submit</button>
+                     <button  id="final" class="btn btn-lg btn-primary btn-block">Submit</button>
                 </div>
             </form>
            <a href="/campgrounds">Go back</a>
           </div>
-       
+
+    <script>
+        var but=document.getElementById('fr');
+        var rate=document.getElementById('price');
+        var bill=document.getElementById('bill');
+        var to =document.getElementById("to");
+        var from =document.getElementById("from");
+        var num=document.getElementById("num");
+        var print=document.getElementById("bill1");
+        // console.log(Number(rate.innerHTML));
+        but.onsubmit=function(e){
+            if(print.value>0){
+                return true;
+            }
+            else {
+                e.preventDefault();
+                alert("Select valid values");
+            }
+        }
+        num.onchange=function(){
+            if(num.value<=0){
+                num.value=1;
+            }
+        }
+        num.addEventListener("change",updateprice);
+        to.addEventListener("change",updateprice);
+        from.addEventListener("change",updateprice);
+        to.addEventListener("change",updatevalueto);
+        from.addEventListener("change",updatevaluefrom);
+        function updatevaluefrom() {
+            var d1=new Date(to.value);
+            var d2= new Date(from.value);
+            if((d1.getTime()-d2.getTime())<0){
+                //alert("wtf");
+                to.value=from.value;
+                updateprice();
+            }
+        }
+        function updatevalueto(){
+            var d1=new Date(to.value);
+            var d2= new Date(from.value);
+            if((d1.getTime()-d2.getTime())<0){
+                //alert("wtf");
+                to.value=from.value;
+                updateprice();
+            }
+        }
+        function updateprice(){
+            var date2 = new Date(to.value);
+            var date1 = new Date(from.value);
+            // console.log(date2);
+
+            var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            // console.log(diffDays);
+            var totalbill =  Number(rate.innerHTML) * diffDays * Number(num.value);
+            bill.innerHTML="Total Bill: &#8377;"+ totalbill;
+            print.value=totalbill;
+        }
+
+    </script>
     </div>
 </div>
 <% include ../partials/footer%>

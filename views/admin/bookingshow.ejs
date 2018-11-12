@@ -20,8 +20,8 @@
             <td><a href="/admin/bookings/<%=results[i].BOOKING_ID%>"><%=results[i].BOOKING_ID%></a></td>
             <td><%=results[i].NAME%></td>
             <td><%=results[i].CAMPNAME%></td>
-            <td><%=results[i].START_F.getDay()+"/"+(results[i].START_F.getMonth()+1)+"/"+results[i].START_F.getFullYear()%></td>
-            <td><%=results[i].END_T.getDay()+"/"+(results[i].END_T.getMonth()+1)+"/"+results[i].END_T.getFullYear()%></td>
+            <td><%=results[i].START_F.getDate()+"/"+(results[i].START_F.getMonth()+1)+"/"+results[i].START_F.getFullYear()%></td>
+            <td><%=results[i].END_T.getDate()+"/"+(results[i].END_T.getMonth()+1)+"/"+results[i].END_T.getFullYear()%></td>
             <td><%=results[i].EMAIL%></td>
             <%if(results[i].CANCELLED){%>
                 <td>Yes</td>

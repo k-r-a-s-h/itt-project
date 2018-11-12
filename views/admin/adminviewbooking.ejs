@@ -10,8 +10,8 @@
                         <div class="panel-body">
                             <h3>Booking ID:<span style="color:brown"><%=booked[0].BOOKING_ID%></span></h3>
                             <hr>
-                            <h4 style="display:inline-block;width: 45%;">FROM:<span style="color: brown"><%=booked[0].START_F.getDay().toString()+" / "+(booked[0].START_F.getMonth()+1).toString()+" / "+(booked[0].START_F.getFullYear()) %></span></h4>
-                            <h4 style="display:inline-block;width: 45%;">TO:<span style="color: brown"><%=booked[0].END_T.getDay()+" / "+(booked[0].END_T.getMonth()+1).toString()+" / "+booked[0].END_T.getFullYear()%></span></h4>
+                            <h4 style="display:inline-block;width: 45%;">FROM:<span style="color: brown"><%=booked[0].START_F.getDate().toString()+" / "+(booked[0].START_F.getMonth()+1).toString()+" / "+(booked[0].START_F.getFullYear()) %></span></h4>
+                            <h4 style="display:inline-block;width: 45%;">TO:<span style="color: brown"><%=booked[0].END_T.getDate()+" / "+(booked[0].END_T.getMonth()+1).toString()+" / "+booked[0].END_T.getFullYear()%></span></h4>
                             <!-- format the date -->
                         </div>
                     </div>

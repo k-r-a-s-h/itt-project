@@ -22,9 +22,9 @@
                             <h4 style="display:inline-block; ">Booking ID:<span style="color:brown"><%=bookings[i].BOOKING_ID%></span></h4>
                             <h4 style="display:inline-block">Camp Name:<span style="color:brown"><%=bookings[i].CAMPNAME%></span></h4>
                             <br>
-                            <h4 style="display:inline-block;width: 45%;">FROM:<span style="color: brown"><%=bookings[i].START_F.getDay().toString()+" / "+(bookings[i].START_F.getMonth()+1).toString()+" / "+(bookings[i].START_F.getFullYear())%></span></h4>
+                            <h4 style="display:inline-block;width: 45%;">FROM:<span style="color: brown"><%=bookings[i].START_F.getDate().toString()+" / "+(bookings[i].START_F.getMonth()+1).toString()+" / "+(bookings[i].START_F.getFullYear())%></span></h4>
                             <br>
-                            <h4 style="display:inline-block;width: 45%;">TO:<span style="color: brown"><%=bookings[i].END_T.getDay()+" / "+(bookings[i].END_T.getMonth()+1).toString()+" / "+bookings[i].END_T.getFullYear()%>.</span></h4>
+                            <h4 style="display:inline-block;width: 45%;">TO:<span style="color: brown"><%=bookings[i].END_T.getDate()+" / "+(bookings[i].END_T.getMonth()+1).toString()+" / "+bookings[i].END_T.getFullYear()%>.</span></h4>
                             <br>
                             <%if(bookings[i].CANCELLED==1){%>
                             <h4 style="color: red;" >Cancelled</h4>
