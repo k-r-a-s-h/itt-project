@@ -18,11 +18,11 @@
             <div class="collapse navbar-collapse">
                   <ul class="nav navbar-nav navbar-right ">
                       <%if(!isAuthenticated){%>
-                        <li><a href="/login">Login</a></li>
-                        <li><a href="/register">Sign Up</a></li>
+                        <li><a href="/login"><i class="glyphicon glyphicon-log-in"></i>&nbsp;Login</a></li>
+                        <li><a href="/register"><i class="glyphicon glyphicon-user"></i>&nbsp;Sign Up</a></li>
                         <%} else {%>
-                        <li><a href="/bookings">Bookings</a></li>
-                        <li><a href="/logout">Logout</a></li>
+                        <li><a href="/bookings"><i class="glyphicon glyphicon-bookmark"></i>&nbsp;Bookings</a></li>
+                        <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a></li>
                         
                         <%}%>
                   </ul>

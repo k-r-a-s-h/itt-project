@@ -16,12 +16,12 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right ">
                 <%if(!isAuthenticated){%>
-                    <li><a href="/login">Login</a></li>
-                    <li><a href="/register">Sign Up</a></li>
+                    <li><a href="/login"><i class="glyphicon glyphicon-log-in"></i>&nbsp;Admin Login</a></li>
+                    <!--<li><a href="/register">Sign Up</a></li>-->
                 <%} else {%>
-                    <li><a href="/admin/bookings">View All Bookings</a></li>
-                    <li><a href="/admin/users">View All Users</a></li>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><a href="/admin/bookings"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;View All Bookings</a></li>
+                    <li><a href="/admin/users"><i class="glyphicon glyphicon-list"></i>&nbsp;View All Users</a></li>
+                    <li><a href="/logout"><i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout</a></li>
 
                 <%}%>
             </ul>
