@@ -690,6 +690,7 @@ app.get("/bookings/:id/cancel",authenticationMiddleware(),function (req,res) {
                 res.send("some error occurred");
             }
             else{
+
                 res.redirect("/bookings/"+booking_id);
             }
         })
@@ -753,7 +754,7 @@ app.post("/campgrounds/:id/delete",authenticationMiddleware(),function(req,res){
 });
 //get register page
 app.get("/register",function(req, res) {
-   res.render("register"); 
+   res.render("register",{message1:req.flash('done'),message:req.flash('error')});
 });
 //handle post route register here 
 app.post("/register",function(req,res){
@@ -774,6 +775,8 @@ app.post("/register",function(req,res){
       connection.execute(query,[id,name,city,district,mobile_number,email,hash],{autoCommit:true,outFormat: oracledb.OBJECT},function(err, result) {
         if (err) {
           console.log(err);
+            req.flash('error',"Email-id already used");
+            res.redirect("/register");
         } else {
           console.log("registration done please login !!");
           handleDatabaseOperation(req, res, function(request, response, connection) {
@@ -782,9 +785,11 @@ app.post("/register",function(req,res){
             if(error){
               console.log(error);
               throw error;
+
             }
            //console.log(results.rows[0].USER_ID);
             const user_id=results.rows[0].USER_ID;
+            req.flash('done',"Registration Done. Please Login");
             res.redirect("/login");
             doRelease(connection);
           });
@@ -800,8 +805,8 @@ app.post("/register",function(req,res){
 });
 //get login page
 app.get("/login", function(req, res) {
-    console.log(req.flash('error'));
-   res.render("login",{message: req.flash('error')});
+    // console.log(req.flash('error'));
+   res.render("login",{message: req.flash('error'),message1:req.flash('done')});
 });
 //handle post login route here
 app.post("/login", 

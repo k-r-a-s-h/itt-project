@@ -1,19 +1,77 @@
 <% include ./partials/header%>
 
 <div class="container">
+    <% if (message.length>0) { %>
+    <div class="alert alert-danger" role="alert">
+        <%=message%>
+    </div>
+    <%}%>
+    <% if (message1.length>0) { %>
+    <div class="alert alert-success" role="alert">
+        <%=message1%>
+    </div>
+    <%}%>
     <div class="row">
          <h1 style="text-align:center;">SignUp</h1>
          <div style="width:30%;margin:25px auto;">
-             <form method="POST" action="/register">
-                 <div class="form-group"><input class="form-control" type="text" name="name" placeholder="name" required></div>
-                 <div class="form-group"><input class="form-control" type="password" name="password" placeholder="password" required ></div>
-                 <div class="form-group"><input class="form-control" type="email" name="email" placeholder="email" required></div>
-                 <div class="form-group"><input class="form-control" type="text" name="city" placeholder="city" required></div>
-                 <div class="form-group"><input class="form-control" type="text" name="district" placeholder="district" required></div>
-                 <div class="form-group"><input class="form-control" type="number" name="mobile_number" placeholder="mobile number" required></div>
+             <form method="POST" id="gh" action="/register">
+                 <div class="form-group"><input class="form-control" type="text" name="name" id="name" placeholder="name" required></div>
+                 <div class="form-group"><input class="form-control" type="password" name="password" id="password" placeholder="password" required ></div>
+                 <div class="form-group"><input class="form-control" type="email" name="email" placeholder="email" id="email" required></div>
+                 <div class="form-group"><input class="form-control" type="text" name="city" placeholder="city" id="city" required></div>
+                 <div class="form-group"><input class="form-control" type="text" name="district" placeholder="district" id="district" required></div>
+                 <div class="form-group"><input class="form-control" type="number" name="mobile_number" placeholder="mobile number" id="mobile_number" required></div>
                  <div class="form-group"><input class="btn btn-lg btn-primary btn-block" type="submit" value="Submit"></div>
                  
                  <!--<input type="submit" value="Login!">-->
+                 <script>
+                     var form=document.getElementById("gh");
+                     var name=document.getElementById("name");
+                     var password=document.getElementById("password");
+                     var email=document.getElementById("email");
+                     var city=document.getElementById("city");
+                     var district=document.getElementById("district");
+                     var mobile=document.getElementById("mobile_number");
+
+                     function ValidateEmail(mail)
+                     {
+                         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+                         {
+                             return true;
+                         }
+                         // alert("You have entered an invalid email address!")
+                         return false;
+                     }
+                     function validatephonenumber(phn){
+                         // alert("you have entered an invali phn")
+                         return phn.length == 10;
+                     }
+                     function validatepassword(pass) {
+                         return pass.length > 6;
+                     }
+                     function checkallchar(str) {
+                         return /^[a-zA-Z\ ]+$/.test(str);
+                     }
+                     form.onsubmit=function(e){
+                         var n1= checkallchar(name.value);
+                         var pa= validatepassword(password.value);
+                         var em=ValidateEmail(email.value);
+                         var ci=checkallchar(city.value);
+                         var dis=checkallchar(district.value);
+                         var ph=validatephonenumber(mobile.value);
+                         if(n1  && pa && em && ci && dis && ph  ){
+                             return true;
+                         }
+                         else {
+                             e.preventDefault();
+                             alert("name: "+n1+"\npassword: "+pa+"\nemail: "+em+"\ncity: "+ci+"\ndistrict: "+dis+"\nmobile: "+ph);
+                         }
+                     }
+
+
+
+
+                 </script>
              </form>
          </div>
     </div>
