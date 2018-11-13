@@ -219,8 +219,18 @@ app.get("/admin/bookings",authenticationMiddleware(),function(req,res) {
                 console.log(err);
                 throw err;
             } else {
-                // console.log("done");
-                res.render("admin/bookingshow",{results:result.rows});
+                handleDatabaseOperation(req, res, function (request, response, connection) {
+                    query = "select * from cancellation natural join tran";
+                    connection.execute(query, [], {autoCommit: true, outFormat: oracledb.OBJECT}, function (er, resul) {
+                        if (er) {
+                            console.log(er);
+                            throw er;
+                        } else {
+                            // console.log("done");
+                            res.render("admin/bookingshow", {results: result.rows, cancelled: resul.rows});
+                        }
+                    });
+                });
                 // res.send(result.rows);
             }
 
@@ -653,8 +663,7 @@ app.get("/bookings",authenticationMiddleware(),function(req,res){
       if (err) {
         console.log(err);
       } else {
-
-      console.log(result.rows);
+      // console.log(result.rows);
         //add front end here
       res.render("bookings",{bookings:result.rows,message1:req.flash('done'),message:req.flash('error')});
     }

@@ -2,6 +2,10 @@
 
 
 <div class="container">
+    <h1 style="text-align: center">Bookings</h1>
+    <%if(results.length==0){%>
+        <h3 style="color: #888888;text-align: center;">No bookings available</h3>
+    <%}else {%>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -28,8 +32,37 @@
         </tr>
         <%}%>
 
+
+
         </tbody>
     </table>
+    <%}%>
+    <hr>
+    <h1 style="text-align: center">Cancelled Bookings</h1>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Cancellation ID</th>
+            <th>Transaction ID</th>
+            <th>Price</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%for(var i=0;i<cancelled.length;i++){%>
+        <tr>
+            <td><%=cancelled[i].BOOKING_ID%></td>
+            <td><%=cancelled[i].CANCELLATION_ID%></td>
+            <td><%=cancelled[i].TRANSACTION_ID%></td>
+            <td><%=cancelled[i].PRICE%></td>
+        </tr>
+        <%}%>
+
+        </tbody>
+    </table>
+
+
 
 </div>
 <br>

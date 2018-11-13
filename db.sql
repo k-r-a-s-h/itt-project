@@ -74,3 +74,69 @@ INSERT INTO CANCELLATION VALUES(99999, :OLD.TRANSACTION_ID, :OLD.BOOKING_ID);
 END;
 /
 
+
+
+
+SQL> desc campgrounds;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ ID                                        NOT NULL NUMBER(38)
+ DESCRIPTION                                        VARCHAR2(3999)
+ CAMPNAME                                           VARCHAR2(100)
+ IMGURL                                             VARCHAR2(1000)
+ LOCATION                                           VARCHAR2(100)
+ PRICE                                              NUMBER(38)
+ USER_ID                                            NUMBER(38)
+
+SQL> desc users;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ USER_ID                                   NOT NULL NUMBER(38)
+ NAME                                               VARCHAR2(100)
+ CITY                                               VARCHAR2(50)
+ DISTRICT                                           VARCHAR2(50)
+ PHONE_NO                                           NUMBER(10)
+ EMAIL                                              VARCHAR2(100)
+ PASSWORD                                           VARCHAR2(100)
+ BANNED                                             NUMBER(1)
+
+SQL> desc comments;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COMMENT_ID                                NOT NULL NUMBER(38)
+ CONTENT                                            VARCHAR2(3999)
+ USER_ID                                   NOT NULL NUMBER(38)
+ CAMP_ID                                   NOT NULL NUMBER(38)
+
+SQL> desc booking
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ BOOKING_ID                                NOT NULL VARCHAR2(255)
+ START_F                                            DATE
+ END_T                                              DATE
+ AMOUNT                                             FLOAT(126)
+ CAMP_ID                                   NOT NULL NUMBER
+ USER_ID                                   NOT NULL NUMBER
+ TOTAL_PEOPLE                                       NUMBER
+ TRANSACTION_ID                                     NUMBER(38)
+
+SQL> desc cancellation
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CANCELLATION_ID                           NOT NULL NUMBER(38)
+ TRANSACTION_ID                                     NUMBER(38)
+ BOOKING_ID                                         VARCHAR2(255)
+
+SQL> desc tran
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ TRANSACTION_ID                            NOT NULL NUMBER(38)
+ PRICE                                              FLOAT(126)
+
+
+SQL> desc deleted_grounds;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ USER_ID                                            NUMBER(38)
+ CAMP_ID                                   NOT NULL NUMBER(38)
+ CAMP_NAME                                          VARCHAR2(1000)
