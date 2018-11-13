@@ -1,5 +1,15 @@
 <% include partials/header%>
 <div class="container">
+    <% if (message.length>0) { %>
+    <div class="alert alert-danger" role="alert">
+        <%=message%>
+    </div>
+    <%}%>
+    <% if (message1.length>0) { %>
+    <div class="alert alert-success" role="alert">
+        <%=message1%>
+    </div>
+    <%}%>
     <div class="row">
         <h1 style="text-align:center;">Your Bookings</h1>
         <hr>
@@ -11,11 +21,11 @@
         <div style="width: 75% ;margin:25px auto;">
             <div style= " text-align: center;">
                 <div class="panel-group">
-                    <%if(bookings[i].CANCELLED==0){%>
+
                     <div class="panel panel-primary">
-                    <%}else{%>
-                        <div class="panel panel-danger">
-                            <%}%>
+
+
+
                         <div class="panel-body " style="text-align: right;display: inline-block" >
 
                             <img src="<%=bookings[i].IMGURL%>" alt="lol" class="img-thumbnail" style="display:inline-block;float: left; object-fit: scale-down;height:30%;width:30%">
@@ -26,9 +36,6 @@
                             <br>
                             <h4 style="display:inline-block;width: 45%;">TO:<span style="color: brown"><%=bookings[i].END_T.getDate()+" / "+(bookings[i].END_T.getMonth()+1).toString()+" / "+bookings[i].END_T.getFullYear()%>.</span></h4>
                             <br>
-                            <%if(bookings[i].CANCELLED==1){%>
-                            <h4 style="color: red;" >Cancelled</h4>
-                            <%}%>
                             <!-- format the date -->
 
                         </div>

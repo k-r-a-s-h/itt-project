@@ -608,13 +608,13 @@ app.post("/campgrounds/:id/book",authenticationMiddleware(),function(req,res){
   var to1=req.body.to;//check the date
   var user_id = Number(req.body.user_id);
   var amount=Number(req.body.bill);
-  var cancelled=0;
   var admits=req.body.number;
   var camp;
+  var transaction;
   var booking_id="BOOK000"+camp_id+user_id+to1+from1+Math.floor((Math.random() * 10000) + 1);
-  var query="INSERT INTO booking (booking_id,start_f,end_t,amount,cancelled,camp_id,user_id,total_people) VALUES(:booking_id,TO_DATE(:from1,'yyyy/mm/dd'),TO_DATE(:to1,'yyyy/mm/dd'),:amount,:cancelled,:camp_id,:user_id,:admits)";
+  var query="INSERT INTO booking (booking_id,start_f,end_t,amount,camp_id,user_id,total_people,transaction_id) VALUES(:booking_id,TO_DATE(:from1,'yyyy/mm/dd'),TO_DATE(:to1,'yyyy/mm/dd'),:amount,:camp_id,:user_id,:admits,9999)";
   handleDatabaseOperation(req, res, function(request, response, connection) {
-    connection.execute(query, [booking_id,from1,to1,amount,cancelled,camp_id,user_id,admits], {autoCommit:true, outFormat: oracledb.OBJECT }, function(err, result) {
+    connection.execute(query, [booking_id,from1,to1,amount,camp_id,user_id,admits], {autoCommit:true, outFormat: oracledb.OBJECT }, function(err, result) {
       if (err) {
         console.log(err);
         res.send("error");
@@ -628,8 +628,9 @@ app.post("/campgrounds/:id/book",authenticationMiddleware(),function(req,res){
               res.send("error 2");
             }
             else{
+                req.flash('done',"Booking confirmed");
               var booked={camp_id:camp_id,from:from1,to:to1,user_id:user_id,amount:amount,booking_id:booking_id,admits:admits};
-              res.render("campgrounds/confirm",{booked:booked,campground: result.rows});
+              res.render("campgrounds/confirm",{booked:booked,campground: result.rows,message1:req.flash('done'),message:req.flash('error')});
             }
           })
         });
@@ -655,7 +656,7 @@ app.get("/bookings",authenticationMiddleware(),function(req,res){
 
       console.log(result.rows);
         //add front end here
-      res.render("bookings",{bookings:result.rows});
+      res.render("bookings",{bookings:result.rows,message1:req.flash('done'),message:req.flash('error')});
     }
     doRelease(connection);
     });
@@ -670,8 +671,8 @@ app.get("/bookings/:booking_id",authenticationMiddleware(),function(req,res){
                console.log(err);
            }
            else{
-               console.log((result.rows));
-               res.render("./campgrounds/display",{booked:result.rows});
+               // console.log((result.rows));
+               res.render("./campgrounds/display",{booked:result.rows,message1:req.flash('done'),message:req.flash('error')});
            }
            doRelease(connection);
 
@@ -683,15 +684,15 @@ app.get("/bookings/:id/cancel",authenticationMiddleware(),function (req,res) {
     handleDatabaseOperation(req,res,function (request,response,connection) {
         var booking_id=req.params.id.toString();
         var user_id=Number(req.user.user_id);
-        var query="UPDATE booking set cancelled=1 where booking_id=:user_id and user_id=:user_id";
+        var query="DELETE from booking where booking_id=:booking_id and user_id=:user_id";
         connection.execute(query,[booking_id,user_id],{autoCommit:true,outFormat:oracledb.OBJECT},function (err,result) {
             if(err){
                 console.log(err);
                 res.send("some error occurred");
             }
             else{
-
-                res.redirect("/bookings/"+booking_id);
+                req.flash('done','Booking Cancelled!')
+                res.redirect("/bookings");
             }
         })
     })
@@ -705,6 +706,7 @@ app.get("/campgrounds/:id/edit",authenticationMiddleware(),function(req,res){
           console.log(err);
         } else {
         //console.log(result.rows);
+
         res.render("campgrounds/edit",{campground: result.rows});
       }
       doRelease(connection);

@@ -1,6 +1,16 @@
 <% include ../partials/header%>
 <div class="container">
     <div class="row">
+        <% if (message.length>0) { %>
+        <div class="alert alert-danger" role="alert">
+            <%=message%>
+        </div>
+        <%}%>
+        <% if (message1.length>0) { %>
+        <div class="alert alert-success" role="alert">
+            <%=message1%>
+        </div>
+        <%}%>
         <h1 style="text-align:center;">Booking Confirmed!!</h1>
         <hr>
           <div style="width: 75% ;margin:25px auto;">

@@ -23,11 +23,8 @@
             <td><%=results[i].START_F.getDate()+"/"+(results[i].START_F.getMonth()+1)+"/"+results[i].START_F.getFullYear()%></td>
             <td><%=results[i].END_T.getDate()+"/"+(results[i].END_T.getMonth()+1)+"/"+results[i].END_T.getFullYear()%></td>
             <td><%=results[i].EMAIL%></td>
-            <%if(results[i].CANCELLED){%>
-                <td>Yes</td>
-            <%}else{%>
+
                 <td>No</td>
-            <%}%>
         </tr>
         <%}%>
 
